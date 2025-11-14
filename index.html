@@ -266,6 +266,13 @@
             console.log('Form submitted');
             console.log('Touched fields:', touchedFields);
             
+            // Prevent double submission
+            const submitBtn = document.querySelector('.submit-btn');
+            if (submitBtn.disabled) {
+                console.log('Already submitting, ignoring duplicate submission');
+                return;
+            }
+            
             // Check if all fields have been touched
             const untouchedFields = [];
             for (const [field, touched] of Object.entries(touchedFields)) {
@@ -319,17 +326,31 @@
             };
             
             // Show loading state
-            const submitBtn = document.querySelector('.submit-btn');
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
             
             // Use JSONP to bypass CORS
             const callbackName = 'jsonpCallback_' + Date.now();
+            console.log('Creating callback:', callbackName);
+            
+            // Set timeout in case script never loads
+            const timeout = setTimeout(function() {
+                console.error('JSONP request timed out');
+                alert('There was an error submitting your response. Please try again.');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                delete window[callbackName];
+                const script = document.getElementById('jsonp_script');
+                if (script) {
+                    script.remove();
+                }
+            }, 10000); // 10 second timeout
             
             // Create callback function
             window[callbackName] = function(response) {
-                console.log('Response:', response);
+                clearTimeout(timeout);
+                console.log('JSONP Response:', response);
                 
                 // Clean up
                 delete window[callbackName];
@@ -349,7 +370,7 @@
                         document.querySelector(`[data-field="${field}"]`).classList.add('untouched');
                     }
                 } else {
-                    alert('There was an error submitting your response. Please try again.');
+                    alert('There was an error: ' + (response.error || 'Unknown error'));
                 }
                 
                 submitBtn.textContent = originalText;
@@ -361,17 +382,22 @@
             params.append('callback', callbackName);
             const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
             
+            console.log('JSONP URL:', url);
+            
             // Create script tag for JSONP request
             const script = document.createElement('script');
             script.id = 'jsonp_script';
             script.src = url;
-            script.onerror = function() {
-                alert('There was an error submitting your response. Please try again.');
+            script.onerror = function(error) {
+                clearTimeout(timeout);
+                console.error('Script load error:', error);
+                alert('There was an error submitting your response. Please check your connection and try again.');
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
                 delete window[callbackName];
             };
             
+            console.log('Appending JSONP script tag');
             document.body.appendChild(script);
         });
     </script>
