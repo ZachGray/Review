@@ -147,7 +147,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Visual Arts Review Week!</h1>
+        <h1>Visual Arts Review Week</h1>
         
         <form>
             <div class="question-group untouched" data-field="name">
@@ -217,7 +217,7 @@
     
     <script>
         // Replace this URL with your Google Apps Script web app URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFVUwgcbW5mPIh_axe3a1qRtCjHkaMhF8w1-fquoS60yg22_UlrYxwk8dIY0ONbkrdvA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9j96E3csf32z-gZFUYjo3NSdGhYC_p0xH6u7YIIFAVkgIRljJtDPatErLPhSk_vGQbg/exec';
         
         // Track which fields have been touched
         const touchedFields = {
@@ -324,43 +324,55 @@
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
             
-            // Send to Google Sheets
-            console.log('Sending data:', formData);
+            // Use JSONP to bypass CORS
+            const callbackName = 'jsonpCallback_' + Date.now();
             
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
-                return response.text();
-            })
-            .then(text => {
-                console.log('Response text:', text);
-                alert('Thank you! Your responses have been submitted.');
+            // Create callback function
+            window[callbackName] = function(response) {
+                console.log('Response:', response);
                 
-                // Reset form and touched states
-                document.querySelector('form').reset();
-                for (const field in touchedFields) {
-                    touchedFields[field] = false;
-                    document.querySelector(`[data-field="${field}"]`).classList.remove('touched');
-                    document.querySelector(`[data-field="${field}"]`).classList.add('untouched');
+                // Clean up
+                delete window[callbackName];
+                const script = document.getElementById('jsonp_script');
+                if (script) {
+                    script.remove();
+                }
+                
+                if (response.result === 'success') {
+                    alert('Thank you! Your responses have been submitted.');
+                    
+                    // Reset form and touched states
+                    document.querySelector('form').reset();
+                    for (const field in touchedFields) {
+                        touchedFields[field] = false;
+                        document.querySelector(`[data-field="${field}"]`).classList.remove('touched');
+                        document.querySelector(`[data-field="${field}"]`).classList.add('untouched');
+                    }
+                } else {
+                    alert('There was an error submitting your response. Please try again.');
                 }
                 
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-                console.error('Error details:', error.message);
+            };
+            
+            // Build URL with parameters
+            const params = new URLSearchParams(formData);
+            params.append('callback', callbackName);
+            const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
+            
+            // Create script tag for JSONP request
+            const script = document.createElement('script');
+            script.id = 'jsonp_script';
+            script.src = url;
+            script.onerror = function() {
                 alert('There was an error submitting your response. Please try again.');
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            });
+                delete window[callbackName];
+            };
+            
+            document.body.appendChild(script);
         });
     </script>
 </body>
