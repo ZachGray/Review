@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Self-Evaluation - SVAD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #2b3e50;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        label {
+            display: block;
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .slider-container {
+            position: relative;
+            padding: 0 10px;
+        }
+        
+        .question-group.untouched {
+            opacity: 0.5;
+        }
+        
+        .question-group.touched {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        @keyframes flash {
+            0% { 
+                background-color: transparent;
+            }
+            50% { 
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+            100% { 
+                background-color: transparent;
+            }
+        }
+        
+        .question-group {
+            padding: 10px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+        
+        .question-group.flash {
+            animation: flash 0.6s ease;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #4a5f7f;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 0 5px;
+        }
+        
+        .slider-labels span {
+            color: #a8b8cc;
+            font-size: 14px;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            background: #5b9bd5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #4a8bc2;
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Visual Arts Review Week</h1>
+        
+        <form>
+            <div class="question-group untouched" data-field="name">
+                <label for="studentName">Your Name</label>
+                <input type="text" id="studentName" name="studentName" required 
+                       style="width: 100%; padding: 12px; border-radius: 6px; border: none; font-size: 16px; background: #4a5f7f; color: white;">
+            </div>
+            
+            <div class="question-group untouched" data-field="q1">
+                <label for="q1">Are you challenged or overwhelmed by your art classes?</label>
+                <div class="slider-container">
+                    <input type="range" id="q1" name="q1" min="0" max="100" value="50">
+                    <div class="slider-labels">
+                        <span>Not challenged</span>
+                        <span>Overwhelmed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-group untouched" data-field="q3">
+                <label for="q3">How connected are you to the creative community here?</label>
+                <div class="slider-container">
+                    <input type="range" id="q3" name="q3" min="0" max="100" value="50">
+                    <div class="slider-labels">
+                        <span>Isolated</span>
+                        <span>Connected</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-group untouched" data-field="q4">
+                <label for="q4">How clear is your sense of purpose?</label>
+                <div class="slider-container">
+                    <input type="range" id="q4" name="q4" min="0" max="100" value="50">
+                    <div class="slider-labels">
+                        <span>Not very clear</span>
+                        <span>Very clear</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-group untouched" data-field="q5">
+                <label for="q5">How real does your spiritual life feel?</label>
+                <div class="slider-container">
+                    <input type="range" id="q5" name="q5" min="0" max="100" value="50">
+                    <div class="slider-labels">
+                        <span>Not very real</span>
+                        <span>Very real</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-group untouched" data-field="q2">
+                <label for="q2">How much value are you getting from your overall experience here?</label>
+                <div class="slider-container">
+                    <input type="range" id="q2" name="q2" min="0" max="100" value="50">
+                    <div class="slider-labels">
+                        <span>Not much</span>
+                        <span>A lot</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+    
+    <script>
+        // Replace this URL with your Google Apps Script web app URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjrGE4MBDZwe6PLg9AWdCoEZw8lCZjmEl0JbnMXNfUzQGSmW6B9uaoYSj1ZOoSaDvSAA/exec';
+        
+        // Track which fields have been touched
+        const touchedFields = {
+            name: false,
+            q1: false,
+            q3: false,
+            q4: false,
+            q5: false,
+            q2: false
+        };
+        
+        // Mark name field as touched when user types
+        document.getElementById('studentName').addEventListener('input', function() {
+            touchedFields.name = true;
+            document.querySelector('[data-field="name"]').classList.remove('untouched');
+            document.querySelector('[data-field="name"]').classList.add('touched');
+        });
+        
+        // Mark sliders as touched when user interacts with them
+        ['q1', 'q3', 'q4', 'q5', 'q2'].forEach(function(fieldId) {
+            const slider = document.getElementById(fieldId);
+            
+            slider.addEventListener('input', function() {
+                touchedFields[fieldId] = true;
+                document.querySelector(`[data-field="${fieldId}"]`).classList.remove('untouched');
+                document.querySelector(`[data-field="${fieldId}"]`).classList.add('touched');
+            });
+            
+            // Also track mouse/touch start to catch even if value doesn't change
+            slider.addEventListener('mousedown', function() {
+                touchedFields[fieldId] = true;
+                document.querySelector(`[data-field="${fieldId}"]`).classList.remove('untouched');
+                document.querySelector(`[data-field="${fieldId}"]`).classList.add('touched');
+            });
+            
+            slider.addEventListener('touchstart', function() {
+                touchedFields[fieldId] = true;
+                document.querySelector(`[data-field="${fieldId}"]`).classList.remove('untouched');
+                document.querySelector(`[data-field="${fieldId}"]`).classList.add('touched');
+            });
+        });
+        
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            console.log('Form submitted');
+            console.log('Touched fields:', touchedFields);
+            
+            // Check if all fields have been touched
+            const untouchedFields = [];
+            for (const [field, touched] of Object.entries(touchedFields)) {
+                if (!touched) {
+                    untouchedFields.push(field);
+                }
+            }
+            
+            console.log('Untouched fields:', untouchedFields);
+            
+            // Check if name is empty
+            const nameValue = document.getElementById('studentName').value.trim();
+            if (!nameValue) {
+                if (!untouchedFields.includes('name')) {
+                    untouchedFields.push('name');
+                }
+            }
+            
+            // If there are untouched fields, flash them and show error
+            if (untouchedFields.length > 0) {
+                console.log('Validation failed, flashing fields:', untouchedFields);
+                
+                untouchedFields.forEach(function(field) {
+                    const element = document.querySelector(`[data-field="${field}"]`);
+                    console.log('Flashing element:', element);
+                    
+                    if (element) {
+                        element.classList.add('flash');
+                        
+                        // Remove flash class after animation
+                        setTimeout(function() {
+                            element.classList.remove('flash');
+                        }, 600);
+                    }
+                });
+                
+                return;
+            }
+            
+            console.log('Validation passed, submitting...');
+            
+            // All fields touched, proceed with submission
+            const formData = {
+                name: nameValue,
+                timestamp: new Date().toISOString(),
+                q1_challenged: document.getElementById('q1').value,
+                q2_community: document.getElementById('q3').value,
+                q3_purpose: document.getElementById('q4').value,
+                q4_spiritual: document.getElementById('q5').value,
+                q5_overall_value: document.getElementById('q2').value
+            };
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            // Send to Google Sheets
+            console.log('Sending data:', formData);
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                return response.text();
+            })
+            .then(text => {
+                console.log('Response text:', text);
+                alert('Thank you! Your responses have been submitted.');
+                
+                // Reset form and touched states
+                document.querySelector('form').reset();
+                for (const field in touchedFields) {
+                    touchedFields[field] = false;
+                    document.querySelector(`[data-field="${field}"]`).classList.remove('touched');
+                    document.querySelector(`[data-field="${field}"]`).classList.add('untouched');
+                }
+                
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                console.error('Error details:', error.message);
+                alert('There was an error submitting your response. Please try again.');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
